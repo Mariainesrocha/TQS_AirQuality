@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Healthy Breeze </title>
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Leckerli+One" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="js/sockjs-0.3.4.min.js"></script>
+    <script src="js/stomp.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/myScript.js"></script>
+
+    <style>
+        body, html {
+            height: 100%;
+        }
+
+        i {
+            color: white;
+        }
+        a:hover, a:visited, a:link, a:active {
+            text-decoration: none!important;
+            color: #4d4d4d;
+            -webkit-box-shadow: none!important;
+            box-shadow: none!important;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+
+        #three-images {
+            padding: 4em 0 6em 0;
+        }
+
+        .img-circle-div {
+        .column(4);
+            text-align: center;
+        }
+
+        #three-images img {
+            border-radius: 50%;
+            box-shadow: 0 1px 2px rgba(0,0,0,.25);
+        }
+
+        .parallax {
+
+            /* Full height */
+            height: 100%;
+            background-image: url(../images/almost.jpg);
+
+            /* Create the parallax scrolling effect */
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .myClass{
+            text-align: center;
+            position: relative;
+            padding: 4em 0 6em 0;
+            color: white;
+            background: cadetblue;
+            opacity: .8;
+        }
+
+        #summary {
+            width: 100%;
+            text-align: center;
+            position: relative;
+            padding: 4em 0 6em 0;
+            color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,.25);
+            text-shadow: 0 0 1px rgba(0,0,0,.05), 0 1px 2px rgba(0,0,0,.3);
+            background: #75f6d0; /*#AA7742;  style="background: #00c688*/
+        }
+
+        #summary:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url("images/summary.jpg") repeat center center;
+            opacity: .5;
+        }
+
+        #summary .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        #summary p {
+            margin: 0 0 2.7em 0;
+        }
+        .text {
+            background-color: #b6a421;
+            color: white;
+            font-size: 5vw;
+            font-weight: bold;
+            margin: 0 auto;
+            padding: 10px;
+            width: 60%;
+            text-align: center;
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            mix-blend-mode: luminosity;
+        }
+
+        .bd-example-modal-lg .modal-dialog{
+            display: table;
+            position: relative;
+            margin: 0 auto;
+            top: calc(50% - 24px);
+        }
+
+        .bd-example-modal-lg .modal-dialog .modal-content{
+            background-color: transparent;
+            border: none;
+        }
+    </style>
+</head>
+<body style=" font-size: 20px; font-family: 'Montserrat', sans-serif; line-height: 1.8;">
+    <header id="main-header" class="parallax" style="height: 60%;">
+        <div class="container" style="text-align: center; color: #00c688">
+            <h1 class="text" style="font-family: 'Leckerli One', cursive;"> Healthy Breeze </h1>
+        </div>
+    </header>
+
+    <section id="three-images"  class="container-fluid" style="background: #3d3c3c; color: white; height: 60%; width: 100%;  text-align: center; position: relative;">
+        <div class="container" style="text-align: center">
+            <header class="body-header" style="padding-bottom: 5%;">
+                <h3>A multi layered spring boot web application</h3>
+                <h2> What kind of information do you find here? </h2>
+            </header>
+            <div class="row" style="display: flex; justify-content: center;">
+                <div class="img-circle-div col-md-3">
+                    <img src="images/circle1.png"/>
+                    <p></p>
+                    <h3> Air Quality Information</h3>
+                </div>
+                <div class="img-circle-div col-md-3">
+                    <img src="images/circle2.png"/>
+                    <p></p>
+                    <h3> Pollen Information</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="parallax" style="display: flex;  justify-content: center; align-items: center;">
+        <div class="container myClass" style="height: 60%;">
+            <h2> Your Location: (IP) <span th:if="${place != null}" th:text="${place.name}"> </span><span th:unless="${place != null}">  not found </span></h2>
+
+            <tr th:each="p : ${place}">
+                <div> <label style="font-weight: bold"> Latitude: </label>   <span th:text="${#numbers.formatDecimal(p.latitude, 0, 3, 'POINT')}"></span></span>   <label style="font-weight: bold"> Longitude: </label>  <span th:text=" ${#numbers.formatDecimal(p.longitude, 0, 3,'POINT')}"></span></div>
+                <div>
+                    <label style="font-weight: bold"> Air Quality Index: </label> <span th:text="${p.airQualityInfo[0]}"></span>
+                </div>
+                <div>
+                    <label style="font-weight: bold"> Pollutant: </label> <span th:text="${p.airQualityInfo[1]}"> </span> <label style="font-weight: bold"> - Concentration: </label> <span th:text="${p.airQualityInfo[2]}"> </span>
+                </div>
+                <div th:each="map : ${p.airElements}">
+                    <div th:each="mapEntry : ${map}">
+                        <span th:text="${mapEntry.key}" style="font-weight: bold"></span> : <span th:text="${mapEntry.value}"></span>
+                    </div>
+                </div>
+            </tr>
+            <div th:if="${place == null}" style="padding-top: 1%">
+                <i class="fa fa-frown-o" style="font-size: 10vw;"></i>
+                <span style="font-family: 'Leckerli One', cursive; font-size: 10vw; padding-left: 2%"> Oops!! </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <section id="summary" style="background: #1d6ff9">
+        <div class="container">
+            <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4" style="display: inline-block; margin: auto; ">
+                <div class="input-group">
+                    <input name="city search bar" id="searchInput" type="search" placeholder="City" aria-describedby="button-addon1" class="form-control border-0 bg-light rounded-pill">
+                    <div class="input-group-append">
+                        <button id="searchButton" type="button" class="btn btn-link text-primary"> <span class="text-primary">Search</span> <i class="fa fa-search text-primary"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div style="padding-top: 5%">
+                <label style="color: white"> Latitude: </label>
+                <div class="p-1 bg-light rounded shadow-sm mb-4" style="display: inline-block; margin: auto; ">
+                    <div class="input-group">
+                        <input name="latitude search bar" id="lat" type="search" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+                    </div>
+                </div>
+                <label style="color: white; padding-left: 2%"> Longitude: </label>
+                <div class="p-1 bg-light rounded shadow-sm mb-4" style="display: inline-block; margin: auto; ">
+                    <div class="input-group">
+                        <input name="longitude search bar" id="lng" type="search" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+                    </div>
+                </div>
+                <div class="p-1 bg-primary rounded shadow-sm mb-4" style="display: inline-block; margin: auto; ">
+                    <div class="input-group-append">
+                        <button id="searchButton2" type="submit" class="btn btn-link btn-primary"> <span style="color: white; text-decoration: none;">Go</span> <i class="fa fa-search text-light"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="parallax"  style="display: flex;  justify-content: center; align-items: center; padding-top: 1%; padding-bottom: 1%">
+        <div class="container myClass">
+            <h3> Search results </h3>
+            <table class="table table-responsive-md" id="searchTable" style="display: none; color: white;">
+                <colgroup>
+                    <col style="width:15%">
+                    <col style="width:20%">
+                    <col style="width:20%">
+                    <col style="width:23%">
+                    <col style="width:20%">
+                    <col style="width:2%">
+                </colgroup>
+                <thead>
+                <tr style="height: 2%;">
+                    <th>City</th>
+                    <th>Air Quality</th>
+                    <th>Elements</th>
+                    <th>Pollen</th>
+                    <th>Last Update</th>
+                    <th> </th>
+                </tr>
+                </thead>
+                <tbody id="table_body">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade bd-example-modal-sm" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title text-danger">Error Message</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                 <p> Some error occur, try again! </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal bd-example-modal-lg" id="spinnerModal" data-backdrop="static" data-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content" style="width: 48px; background-color: transparent;border: none;">
+                <span class="fa fa-spinner fa-spin fa-5x text-light"></span>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background: #4d4d4d; color: white; height: 10%;">
+        <div style="text-align: center; align-content: center">
+            <div id="footer-text">
+                <p>&copy; Author: Maria Inês Rocha<a href="https://www.linkedin.com/in/maria-ines-rocha/" target="_blank"> <i class="fa fa-linkedin"></i> </a> | Project Repository: <a href="https://github.com/Mariainesrocha/TQS_AirQuality" target="_blank"> <i class="fa fa-github"></i></a></p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
