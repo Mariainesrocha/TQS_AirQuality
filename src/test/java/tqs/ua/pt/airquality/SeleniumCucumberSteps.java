@@ -3,6 +3,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.AfterEach;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -35,10 +36,11 @@ public class SeleniumCucumberSteps {
     }
 
     @When("I scroll to {string} section")
-    public void i_scroll(String text) {
+    public void i_scroll(String text) throws InterruptedException {
+        Thread.sleep(3000);
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        WebElement Element = driver.findElement(By.xpath("//h2[contains(.,'"+text+"')]"));
-        js.executeScript("arguments[0].scrollIntoView();", Element);
+        WebElement Element = driver.findElement(By.xpath("//h3[contains(.,'"+text+"')]"));
+        js.executeScript("arguments[0].scrollIntoView(true);", Element);
     }
 
     @When("I click on {string}")
@@ -55,7 +57,7 @@ public class SeleniumCucumberSteps {
     public void showErrorModal(String result) throws InterruptedException {
         Thread.sleep(3000);
         assertThat(driver.findElement(By.className("modal-body")).getText(), is(result));;
-        driver.quit();
+        driver.close();
     }
 
     @Then("I should be shown results including {string}")
@@ -66,12 +68,12 @@ public class SeleniumCucumberSteps {
         } catch (NoSuchElementException e) {
             throw new AssertionError("\"" + result + "\" not available in results");
         } finally {
-            driver.quit();
+            driver.close();
         }
     }
     @Then("I should be shown a table row with results including {string} in city name")
     public void table_results(String city) {
             assertThat(driver.findElement( By.cssSelector("td:nth-child(1)")).getText(), containsStringIgnoringCase(city));
-            driver.quit();
+            driver.close();
     }
 }

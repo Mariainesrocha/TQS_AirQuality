@@ -1,6 +1,6 @@
 package tqs.ua.pt.airquality.Services;
 
-import javassist.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,23 +14,31 @@ import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 @Service
 @Transactional
 public class PlaceService {
     private static final long TIME_TO_LIVE = 120;
     private static final long TIMER = 60;
+
     private final Cache<String, Place> cache = new Cache<>(TIME_TO_LIVE, TIMER);
 
+    ApiConnection api = new ApiConnection();
+
+    private static Logger log = LogManager.getLogger(PlaceService.class);
+
     public Place queryMainAPI(String url, Place queryObj, boolean byName) {       //pode retornar air info, pollen info,air history
-        ApiConnection api = new ApiConnection();
         if (!api.isMainAPIAvailable())
             return null;
         ResponseEntity<Map> res = api.connectMainApi(url);
 
         try {
             if (res.getStatusCode().is2xxSuccessful()) {
+                log.info("MainApi response code 200");
                 if (queryObj != null) { //chamada ao pollen
+                    log.info("Filling pollen informations on city "+queryObj.getName());
                     ArrayList<Object> x = (ArrayList<Object>) res.getBody().get("data");
 
                     LinkedHashMap<String, Object> info = (LinkedHashMap<String, Object>) x.get(0);
@@ -46,9 +54,12 @@ public class PlaceService {
                     queryObj.getPollen_risk().put("Tree", risk.get("tree_pollen").toString());
                     queryObj.getPollen_risk().put("Weed", risk.get("weed_pollen").toString());
 
+                    log.info("Pollen information filled!");
                     return queryObj;
                 }
                 else { //criar objeto base
+                    log.info("Create place from main api response");
+
                     ArrayList<Object> x = (ArrayList<Object>) res.getBody().get("stations");
 
                     LinkedHashMap<String, Object> info = (LinkedHashMap<String, Object>) x.get(0);
@@ -97,16 +108,17 @@ public class PlaceService {
                 return null;
         }
         catch (Exception e) {
+            log.debug("Exception:" +e.toString()+"   - caught when retrieving data from main API");
             return null;
         }
     }
 
     public Place query2ndAPI(String url,String name){      //vai Air INFO, NNC pollen
-        ApiConnection api = new ApiConnection();
         Map<String,Object> res = api.connect2ndApi(url);
 
         try {
             if (res.get("status").equals("ok")){
+                log.info("Second api response status is OK");
                 LinkedHashMap<String, Object> info = (LinkedHashMap<String, Object>) res.get("data");
 
                 Object city = ((LinkedHashMap<String, Object>) info.get("city")).get("name");
@@ -139,32 +151,10 @@ public class PlaceService {
             return null;
         }
         catch (Exception e) {
+            log.debug("Exception:" +e.toString()+"   - caught when retrieving data from second API");
             return null;
         }
     }
-
-    /*
-    public Map<String, Place> getPollutionStatistics() throws NotFoundException, URISyntaxException {
-        Map<String,Place> places = new HashMap<>();
-
-        if (cache.get("most") == null) {
-            Place most = queryMainAPI("https://api.ambeedata.com/latest/by-order/worst", null,false);
-            if (most != null){
-                cache.put("most", most);
-                places.put("worst",most);
-            }
-        }
-        if (cache.get("least") == null) {
-            Place least = queryMainAPI("https://api.ambeedata.com/latest/by-order/best", null,false);
-            if (least != null){
-                cache.put("least", least);
-                places.put("best",least);
-            }
-        }
-        if (places.size() == 0)
-            throw new NotFoundException("It was not possible to connect to this API");
-        return places;
-    }*/
 
     public Place getPlaceWithName(String name) throws URISyntaxException{
         Place place = cache.get(name.toLowerCase());
@@ -173,14 +163,17 @@ public class PlaceService {
             place = queryMainAPI("https://api.ambeedata.com/latest/by-city?city=" + name, null,true);
 
             if(place != null) {
+                log.info("Main API valid results, then query main API for Pollen data");
                 place = queryMainAPI("https://api.ambeedata.com/latest/pollen/by-place?place=" + name,place, true);
                 cache.put(place.getName().toLowerCase(), place);
             } else {
+                log.info("Main API invalid results, then query second API ");
                 place = query2ndAPI("https://api.waqi.info/feed/" + name, name);
                 if(place != null)
                     cache.put(place.getName().toLowerCase(), place);
             }
-        }
+        } else
+            log.info("Place get name from cache");
         return place;
     }
 
@@ -191,6 +184,7 @@ public class PlaceService {
             latitude = Double.parseDouble(lat);
             longitude = Double.parseDouble(lng);
         }catch (Exception e){
+            log.debug("getPlaceByCoords error while trying to parse latitude or longitude value to double");
             throw new URISyntaxException("URL","Invalid latitude or longitude value");
         }
         Place p = cache.findInCacheObjs(latitude,longitude);
@@ -198,14 +192,17 @@ public class PlaceService {
         if(p == null) {
             p = queryMainAPI("https://api.ambeedata.com/latest/by-lat-lng?lat=" + latitude + "&lng=" + longitude, null, false);
             if (p != null) {
+                log.info("Main API valid results, then query main API for Pollen data");
                 p = queryMainAPI("https://api.ambeedata.com/latest/pollen/by-lat-lng?lat=" + latitude + "&lng=" + longitude, p, false);
                 cache.put(p.getName().toLowerCase(), p);
             } else {
+                log.info("Main API invalid results, then query second API ");
                 p = query2ndAPI("https://api.waqi.info/feed/geo:" + latitude + ";" + longitude, null);
                 if (p != null)
                     cache.put(p.getName().toLowerCase(), p);
             }
-        }
+        }else
+            log.info("Place get by coords from cache");
         return p;
     }
 
@@ -214,9 +211,11 @@ public class PlaceService {
         if(p == null) {
             p = query2ndAPI("https://api.waqi.info/feed/here", null);
             if(p != null){
+                log.info("Place returned for current location, 2nd API query");
                 cache.put("here", p);
             }
-        }
+        }else
+            log.info("Current Location Place returned from cache");
         return p;
     }
 

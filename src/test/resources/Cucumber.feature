@@ -2,10 +2,6 @@ Feature: Interact with Healthy Breeze Website
   Background: Interface Tests
     Given Open Browser
 
-  Scenario: See information about my current location when available
-    When I navigate to 'http://localhost:8080/'
-    And I scroll to 'Your Location: (IP)' section
-
   Scenario: See error page when invalid page and back to HomePage
     When I navigate to 'http://localhost:8080/random'
     And I click on 'Go To Homepage'
@@ -15,6 +11,7 @@ Feature: Interact with Healthy Breeze Website
     When I navigate to 'http://localhost:8080/'
     And I write 'Lisboa' in the 'city search bar'
     And I click on 'Search'
+    And I scroll to 'Search results' section
     Then I should be shown a table row with results including 'lisboa' in city name
 
   Scenario: Search by valid city coordinates

@@ -10,7 +10,7 @@
             </activation>
             <properties>
                 <sonar.host.url>
-                    http://127.0.0.1:9002
+                    http://localhost:9002
                 </sonar.host.url>
             </properties>
         </profile>

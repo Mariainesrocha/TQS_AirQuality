@@ -1,12 +1,13 @@
 package tqs.ua.pt.airquality;
 
+import org.springframework.stereotype.Component;
 import tqs.ua.pt.airquality.Entities.Place;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-// referência: https://crunchify.com/how-to-create-a-simple-in-memory-cache-in-java-lightweight-cache/
+@Component
     public class Cache<K, T> {
 
         private final long timeToLive; //tempo em q os objetos guardados em cache são apagados
@@ -25,6 +26,27 @@ import java.util.HashMap;
                 this.value = value;
             }
 
+        }
+
+        public Cache() {
+            this.timeToLive = 120;
+            this.timer = 60;
+            this.mycache = new HashMap<>();
+
+            Thread t = new Thread(new Runnable() {
+                public void run() {
+                    while (true) {
+                        try {
+                            Thread.sleep(60 * 1000);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                        cleanup();
+                    }
+                }
+            });
+            t.setDaemon(true);
+            t.start();
         }
 
         public Cache(long timeToLive, final long timer) {   //construtor
@@ -136,6 +158,7 @@ import java.util.HashMap;
         public int getMisses() {
             return misses;
         }
+
 
         public long getTimeToLive() {
             return timeToLive/1000;
